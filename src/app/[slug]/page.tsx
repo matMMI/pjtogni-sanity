@@ -3,6 +3,7 @@ import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
 import Link from "next/link";
+import Image from "next/image";
 
 const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
 
@@ -14,12 +15,19 @@ const urlFor = (source: SanityImageSource) =>
 
 const options = { next: { revalidate: 30 } };
 
-export default async function PostPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
-  const post = await client.fetch<SanityDocument>(POST_QUERY, params, options);
+// Définir les params comme une Promise
+interface PageProps {
+  params: Promise<{ slug: string }>;
+}
+
+async function PostPage({ params }: PageProps) {
+  // Attendre la résolution de params
+  const resolvedParams = await params;
+  const post = await client.fetch<SanityDocument>(
+    POST_QUERY,
+    resolvedParams,
+    options
+  );
   const postImageUrl = post.image
     ? urlFor(post.image)?.width(550).height(310).url()
     : null;
@@ -30,12 +38,12 @@ export default async function PostPage({
         ← Back to posts
       </Link>
       {postImageUrl && (
-        <img
+        <Image
           src={postImageUrl}
           alt={post.title}
           className="aspect-video rounded-xl"
-          width="550"
-          height="310"
+          width={550}
+          height={310}
         />
       )}
       <h1 className="text-4xl font-bold mb-8">{post.title}</h1>
@@ -46,3 +54,5 @@ export default async function PostPage({
     </main>
   );
 }
+
+export default PostPage;
