@@ -2,7 +2,7 @@ import { PortableText, type SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
-import Link from "next/link";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { portableTextComponents } from "@/components/PortableTextComponents";
@@ -35,7 +35,7 @@ export default async function Page({ params }: PageProps) {
   );
 
   if (!page) {
-    return <div>Page not found</div>;
+    notFound();
   }
 
   const pageImageUrl = page.mainImage
@@ -43,27 +43,29 @@ export default async function Page({ params }: PageProps) {
     : null;
 
   return (
-    <main className="parent min-h-screen">
+    <main className="parent-container min-h-screen">
       <Navbar />
-      <div className="container mx-auto p-8">
-        {pageImageUrl && (
-          <Image
-            src={pageImageUrl}
-            alt={page.title}
-            className="w-full rounded-xl mb-8"
-            width={1200}
-            height={400}
-            priority
-          />
-        )}
-        <h1 className="text-4xl font-bold mb-8">{page.title}</h1>
-        <div className="prose max-w-none">
-          {Array.isArray(page.content) && (
-            <PortableText
-              value={page.content}
-              components={portableTextComponents}
+      <div className="div2-container flex-1 overflow-hidden">
+        <div className="div2 p-8 overflow-y-auto h-full">
+          {pageImageUrl && (
+            <Image
+              src={pageImageUrl}
+              alt={page.title}
+              className="w-full rounded-xl mb-8"
+              width={1200}
+              height={400}
+              priority
             />
           )}
+          <h1 className="text-4xl font-bold mb-8">{page.title}</h1>
+          <div className="prose max-w-none">
+            {Array.isArray(page.content) && (
+              <PortableText
+                value={page.content}
+                components={portableTextComponents}
+              />
+            )}
+          </div>
         </div>
       </div>
     </main>
