@@ -4,8 +4,15 @@ import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
 import { client } from "@/sanity/client";
 import Link from "next/link";
 import Image from "next/image";
+import Navbar from "@/components/Navbar";
+import { portableTextComponents } from "@/components/PortableTextComponents";
 
-const POST_QUERY = `*[_type == "post" && slug.current == $slug][0]`;
+const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
+  title,
+  content,
+  "slug": slug.current,
+  mainImage,
+}`;
 
 const { projectId, dataset } = client.config();
 const urlFor = (source: SanityImageSource) =>
@@ -15,44 +22,62 @@ const urlFor = (source: SanityImageSource) =>
 
 const options = { next: { revalidate: 30 } };
 
-// Définir les params comme une Promise
 interface PageProps {
-  params: Promise<{ slug: string }>;
+  params: { slug: string };
 }
 
-async function PostPage({ params }: PageProps) {
-  // Attendre la résolution de params
-  const resolvedParams = await params;
-  const post = await client.fetch<SanityDocument>(
-    POST_QUERY,
-    resolvedParams,
+export default async function Page({ params }: PageProps) {
+  const { slug } = params;
+  const page = await client.fetch<SanityDocument>(
+    PAGE_QUERY,
+    { slug },
     options
   );
-  const postImageUrl = post.image
-    ? urlFor(post.image)?.width(550).height(310).url()
+
+  if (!page) {
+    return <div>Page not found</div>;
+  }
+
+  const pageImageUrl = page.mainImage
+    ? urlFor(page.mainImage)?.width(1200).height(400).url()
     : null;
 
   return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8 flex flex-col gap-4">
-      <Link href="/" className="hover:underline">
-        ← Back to posts
-      </Link>
-      {postImageUrl && (
-        <Image
-          src={postImageUrl}
-          alt={post.title}
-          className="aspect-video rounded-xl"
-          width={550}
-          height={310}
-        />
-      )}
-      <h1 className="text-4xl font-bold mb-8">{post.title}</h1>
-      <div className="prose">
-        <p>Published: {new Date(post.publishedAt).toLocaleDateString()}</p>
-        {Array.isArray(post.body) && <PortableText value={post.body} />}
+    <main className="parent min-h-screen">
+      <Navbar />
+      <div className="container mx-auto p-8">
+        {pageImageUrl && (
+          <Image
+            src={pageImageUrl}
+            alt={page.title}
+            className="w-full rounded-xl mb-8"
+            width={1200}
+            height={400}
+            priority
+          />
+        )}
+        <h1 className="text-4xl font-bold mb-8">{page.title}</h1>
+        <div className="prose max-w-none">
+          {Array.isArray(page.content) && (
+            <PortableText
+              value={page.content}
+              components={portableTextComponents}
+            />
+          )}
+        </div>
       </div>
     </main>
   );
 }
 
-export default PostPage;
+export async function generateStaticParams() {
+  const pages = await client.fetch<SanityDocument[]>(
+    `*[_type == "page"]{
+      "slug": slug.current
+    }`
+  );
+
+  return pages.map((page) => ({
+    slug: page.slug,
+  }));
+}

@@ -1,31 +1,95 @@
-import Link from "next/link";
-import { type SanityDocument } from "next-sanity";
-
+import Navbar from "../components/Navbar";
+import { PortableText, type SanityDocument } from "next-sanity";
 import { client } from "@/sanity/client";
+import imageUrlBuilder from "@sanity/image-url";
+import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
+import Image from "next/image";
+import { portableTextComponents } from "@/components/PortableTextComponents";
 
-const POSTS_QUERY = `*[
-  _type == "post"
-  && defined(slug.current)
-]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
+const HOME_PAGE_QUERY = `*[_type == "page"][0]{
+  title,
+  content,
+  mainImage,
+  "slug": slug.current
+}`;
+
+const { projectId, dataset } = client.config();
+const urlFor = (source: SanityImageSource) =>
+  projectId && dataset
+    ? imageUrlBuilder({ projectId, dataset }).image(source)
+    : null;
 
 const options = { next: { revalidate: 30 } };
 
 export default async function IndexPage() {
-  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
+  try {
+    const homePage = await client.fetch<SanityDocument>(
+      HOME_PAGE_QUERY,
+      {},
+      options
+    );
 
-  return (
-    <main className="container mx-auto min-h-screen max-w-3xl p-8">
-      <h1 className="text-4xl font-bold mb-8">Posts</h1>
-      <ul className="flex flex-col gap-y-4">
-        {posts.map((post) => (
-          <li className="hover:underline" key={post._id}>
-            <Link href={`/${post.slug.current}`}>
-              <h2 className="text-xl font-semibold">{post.title}</h2>
-              <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </main>
-  );
+    if (!homePage) {
+      return (
+        <main className="parent mx-auto min-h-screen">
+          <Navbar />
+          <section className="div2">
+            <div className="p-8">
+              <h1 className="text-4xl font-bold mb-8">Bienvenue</h1>
+              <p>
+                Aucune page n'a été trouvée. Veuillez ajouter du contenu dans
+                Sanity.
+              </p>
+            </div>
+          </section>
+        </main>
+      );
+    }
+
+    const pageImageUrl = homePage.mainImage
+      ? urlFor(homePage.mainImage)?.width(1200).height(400).url()
+      : null;
+
+    return (
+      <main className="parent mx-auto min-h-screen">
+        <Navbar />
+        <section className="div2">
+          {pageImageUrl && (
+            <Image
+              src={pageImageUrl}
+              alt={homePage.title}
+              className="w-full object-cover"
+              width={1200}
+              height={400}
+              priority
+            />
+          )}
+          <div className="p-8">
+            <h1 className="text-4xl font-bold mb-8">{homePage.title}</h1>
+            <div className="prose max-w-none">
+              {Array.isArray(homePage.content) && (
+                <PortableText
+                  value={homePage.content}
+                  components={portableTextComponents}
+                />
+              )}
+            </div>
+          </div>
+        </section>
+      </main>
+    );
+  } catch (error) {
+    console.error("Erreur lors de la récupération de la page :", error);
+    return (
+      <main className="parent mx-auto min-h-screen">
+        <Navbar />
+        <section className="div2">
+          <div className="p-8">
+            <h1 className="text-4xl font-bold mb-8">Erreur</h1>
+            <p>Une erreur est survenue lors du chargement de la page.</p>
+          </div>
+        </section>
+      </main>
+    );
+  }
 }
