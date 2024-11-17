@@ -4,15 +4,6 @@ import { useEffect, useState } from "react";
 import "../styles/Navbar.css";
 
 export default function Navbar() {
-  const [pages, setPages] = useState([]);
-
-  useEffect(() => {
-    fetch("/api/pages")
-      .then((res) => res.json())
-      .then((data) => setPages(data))
-      .catch((error) => console.error("Error fetching pages:", error));
-  }, []);
-
   return (
     <nav className="navbar div1">
       <div className="logo">
@@ -23,11 +14,12 @@ export default function Navbar() {
         <p>INFOGRAPHISTE</p>
       </div>
       <ul className="nav-links">
-        {pages.map((page) => (
-          <li key={page.slug}>
-            <Link href={`/${page.slug}`}>{page.title}</Link>
-          </li>
-        ))}
+        <li>
+          <Link href={`/a-propos`}>À propos</Link>
+        </li>
+        <li>
+          <Link href={`/test`}>test</Link>
+        </li>
       </ul>
       <div className="cta">
         <a href="/cv.pdf" className="btn" download>
