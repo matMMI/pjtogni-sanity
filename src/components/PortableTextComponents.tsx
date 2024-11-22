@@ -1,5 +1,5 @@
 import imageUrlBuilder from "@sanity/image-url";
-import { client } from "@/sanity/client";
+import { client } from "../sanity/client";
 import Image from "next/image";
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 

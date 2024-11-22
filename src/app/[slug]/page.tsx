@@ -1,11 +1,11 @@
 import { PortableText, type SanityDocument } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 import type { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import { client } from "@/sanity/client";
+import { client } from "../../sanity/client";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import { portableTextComponents } from "@/components/PortableTextComponents";
+import Navbar from "../../components/Navbar";
+import { portableTextComponents } from "../../components/PortableTextComponents";
 
 const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
   title,
@@ -46,7 +46,7 @@ export default async function Page({ params }: Props) {
     <main className="parent-container min-h-screen">
       <Navbar />
       <div className="div2-container flex-1 overflow-hidden">
-        <div className="div2 p-8 overflow-y-auto h-full">
+        <div className="div2 p-8 overflow-y-auto h-full ">
           {pageImageUrl && (
             <Image
               src={pageImageUrl}
