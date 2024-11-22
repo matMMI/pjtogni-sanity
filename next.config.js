@@ -2,10 +2,13 @@ const nextConfig = {
   images: {
     domains: ["cdn.sanity.io"],
   },
-  webpack: (config) => {
-    config.resolve.fallback = { fs: false };
-    return config;
-  },
+  generateBuildId: () => "build",
+  headers: async () => [
+    {
+      source: "/service-worker.js",
+      headers: [{ key: "Service-Worker-Allowed", value: "/" }],
+    },
+  ],
 };
 
 module.exports = nextConfig;

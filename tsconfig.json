@@ -29,7 +29,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "global.d.ts",
-    "next.config.ks"
+    "next.config.ks",
+    "src/app/projects/page.tsx"
   ],
   "exclude": ["node_modules"]
 }

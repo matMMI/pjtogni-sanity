@@ -18,6 +18,9 @@ export default function Navbar() {
           <Link href={`/a-propos`}>À propos</Link>
         </li>
         <li>
+          <Link href={`/projects`}>Tous mes projets</Link>
+        </li>
+        <li>
           <Link href={`/test`}>test</Link>
         </li>
       </ul>
