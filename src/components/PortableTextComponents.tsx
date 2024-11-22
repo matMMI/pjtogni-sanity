@@ -1,16 +1,21 @@
 import imageUrlBuilder from "@sanity/image-url";
 import { client } from "@/sanity/client";
 import Image from "next/image";
+import { SanityImageSource } from "@sanity/image-url/lib/types/types";
 
 const builder = imageUrlBuilder(client);
 
-function urlFor(source: any) {
+function urlFor(source: SanityImageSource) {
   return builder.image(source);
+}
+
+interface ImageValue {
+  value: SanityImageSource & { alt?: string };
 }
 
 export const portableTextComponents = {
   types: {
-    image: ({ value }: { value: any }) => {
+    image: ({ value }: ImageValue) => {
       const imageUrl = urlFor(value).url();
       return (
         <Image

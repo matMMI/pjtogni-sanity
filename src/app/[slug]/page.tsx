@@ -15,20 +15,20 @@ const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
 }`;
 
 const { projectId, dataset } = client.config();
+
 const urlFor = (source: SanityImageSource) =>
   projectId && dataset
     ? imageUrlBuilder({ projectId, dataset }).image(source)
     : null;
 
 const options = { next: { revalidate: 30 } };
+type Props = {
+  params: Promise<{ slug: string }>;
+};
 
-interface PageProps {
-  params: { slug: string };
-}
-
-export default async function Page({ params }: PageProps) {
-  const { slug } = params;
-  const page = await client.fetch<SanityDocument>(
+export default async function Page({ params }: Props) {
+  const { slug } = await params;
+  const page: SanityDocument | null = await client.fetch(
     PAGE_QUERY,
     { slug },
     options
@@ -73,13 +73,8 @@ export default async function Page({ params }: PageProps) {
 }
 
 export async function generateStaticParams() {
-  const pages = await client.fetch<SanityDocument[]>(
-    `*[_type == "page"]{
-      "slug": slug.current
-    }`
+  const pages = await client.fetch<{ slug: string }[]>(
+    `*[_type == "page"]{ "slug": slug.current }`
   );
-
-  return pages.map((page) => ({
-    slug: page.slug,
-  }));
+  return pages.map((page) => ({ slug: page.slug }));
 }

@@ -37,8 +37,8 @@ export default async function IndexPage() {
             <div className="p-8">
               <h1 className="text-4xl font-bold mb-8">Bienvenue</h1>
               <p>
-                Aucune page n'a été trouvée. Veuillez ajouter du contenu dans
-                Sanity.
+                Aucune page n&apos;a été trouvée. Veuillez ajouter du contenu
+                dans Sanity.
               </p>
             </div>
           </section>

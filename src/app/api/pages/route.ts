@@ -8,7 +8,7 @@ export async function GET() {
       "slug": slug.current
     }`);
     return NextResponse.json(pages);
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Error fetching pages" },
       { status: 500 }
