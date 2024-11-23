@@ -1,21 +1,14 @@
-// src/app/layout.tsx
+// app/layout.tsx
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
-const titleFont = localFont({
-  src: "../../public/fonts/HankenGrotesk-Black.ttf",
-  variable: "--font-title",
-});
-
-const textFont = localFont({
-  src: "../../public/fonts/HankenGrotesk-Light.ttf",
-  variable: "--font-text",
-});
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mon App",
-  description: "Description de mon app",
+  title: "Pierre-Jean TOGNI",
+  description: "Portfolio de Pierre-Jean TOGNI, Infographiste",
 };
 
 export default function RootLayout({
@@ -25,8 +18,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`${titleFont.variable} ${textFont.variable}`}>
-        {children}
+      <body className={inter.className}>
+        <div className="flex h-screen overflow-hidden">
+          <Navbar />
+          <main className="flex-1 h-screen overflow-y-auto">{children}</main>
+        </div>
       </body>
     </html>
   );

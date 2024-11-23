@@ -24,7 +24,7 @@ interface Project {
 
 function ProjectCardSkeleton() {
   return (
-    <div className="relative bg-[#1E1E1E] rounded-2xl overflow-hidden shadow-md">
+    <div className="relative bg-[#1E1E1E] rounded-md overflow-hidden shadow-md">
       <div
         className="absolute inset-0 z-10"
         style={{
@@ -57,11 +57,11 @@ const getBadgeStyle = (category: { title: string; slug: string }) => {
       "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300",
     "mobile-dev":
       "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    design:
+    illustration:
       "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
     frontend:
       "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300",
-    backend:
+    infographie:
       "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300",
     litterature:
       "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300",
@@ -77,7 +77,7 @@ function ProjectCard({ project }: { project: Project }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative bg-white dark:bg-[#1E1E1E] rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+      className="group relative bg-white dark:bg-[#1E1E1E] rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
     >
       {project.image && (
         <div className="relative h-60 overflow-hidden">
@@ -123,7 +123,7 @@ function Dialog({ isOpen, onClose, children }) {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-white dark:bg-[#1E1E1E] p-6 rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-auto relative shadow-2xl"
+            className="bg-white dark:bg-[#1E1E1E] p-6 rounded-md max-w-4xl w-full max-h-[90vh] overflow-auto relative shadow-2xl"
           >
             <button
               onClick={onClose}

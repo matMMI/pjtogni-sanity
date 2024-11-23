@@ -1,4 +1,3 @@
-import Navbar from "../components/Navbar";
 import { PortableText, type SanityDocument } from "next-sanity";
 import { client } from "@/sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
@@ -32,7 +31,6 @@ export default async function IndexPage() {
     if (!homePage) {
       return (
         <main className="parent mx-auto min-h-screen">
-          <Navbar />
           <section className="div2">
             <div className="p-8">
               <h1 className="text-4xl font-bold mb-8">Bienvenue</h1>
@@ -52,7 +50,6 @@ export default async function IndexPage() {
 
     return (
       <main className="flex min-h-screen overflow-hidden">
-        <Navbar />
         <div className="flex-1 flex flex-col h-screen overflow-hidden">
           <div className="flex-1 overflow-y-auto p-8">
             {pageImageUrl && (
@@ -82,7 +79,6 @@ export default async function IndexPage() {
     console.error("Erreur lors de la récupération de la page :", error);
     return (
       <main className="parent mx-auto min-h-screen overflow-y-hidden">
-        <Navbar />
         <section className="div2">
           <div className="p-8">
             <h1 className="text-4xl font-bold mb-8">Erreur</h1>

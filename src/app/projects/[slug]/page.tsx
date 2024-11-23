@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 
 interface ProjectDetails {
   title: string;
-  image: { url: string };
+  image: string;
   description: string;
   body: any[];
 }
