@@ -17,8 +17,14 @@ const Navbar = () => {
 
   const isActiveLink = (path: string) => pathname === path;
 
+  // Fonction pour fermer le menu mobile
+  const handleLinkClick = () => {
+    setIsMobileMenuOpen(false);
+  };
+
   return (
-    <div className="flex h-screen overflow-hidden">
+    <>
+      {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="lg:hidden fixed top-4 right-4 z-50 p-2 bg-black text-white rounded-md"
@@ -28,7 +34,7 @@ const Navbar = () => {
 
       {/* Navigation Bar */}
       <nav
-        className={`fixed z-10 lg:relative flex-none w-[350px] h-screen bg-black text-white flex flex-col justify-between p-16 overflow-hidden transition-transform duration-300 ease-in-out ${
+        className={`fixed z-50 lg:relative flex-none w-[350px] h-screen bg-black text-white flex flex-col justify-between p-16 overflow-hidden transition-transform duration-300 ease-in-out ${
           isMobileMenuOpen
             ? "translate-x-0"
             : "-translate-x-full lg:translate-x-0"
@@ -50,6 +56,7 @@ const Navbar = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
+                  onClick={handleLinkClick} // Ajout du gestionnaire d'événements
                   className={`block text-lg transition-all duration-200 hover:text-gray-300 relative group ${
                     isActiveLink(link.href) ? "text-white" : "text-gray-400"
                   }`}
@@ -82,14 +89,7 @@ const Navbar = () => {
         {/* Background Logo */}
         <div className="absolute bottom-0 left-0 w-[540px] h-[500px] bg-[url('/logo.svg')] bg-no-repeat bg-cover opacity-30" />
       </nav>
-
-      {/* Content Container */}
-      <div className="flex-1 h-screen overflow-hidden">
-        <div className="h-full overflow-y-auto">
-          {/* Le contenu de la page sera injecté ici */}
-        </div>
-      </div>
-    </div>
+    </>
   );
 };
 
