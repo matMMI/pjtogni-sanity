@@ -1,7 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-title);
+  }
 
+  p,
+  span,
+  li {
+    font-family: var(--font-text);
+  }
+}
 *,
 ::after,
 ::before {
@@ -19,6 +34,15 @@
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+  }
+}
+
+@keyframes wave {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 

@@ -10,7 +10,12 @@ const PROJECTS_QUERY = `*[_type == "project"] | order(order asc) {
   description,
   "image": image.asset->url,
   displayMode,
-  body
+  body,
+  category->{
+    _id,
+    title,
+    "slug": slug.current
+  }
 }`;
 
 const options = { next: { revalidate: 30 } };
