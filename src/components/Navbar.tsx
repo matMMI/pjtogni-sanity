@@ -87,7 +87,8 @@ const Navbar = () => {
         </div>
 
         {/* Background Logo */}
-        <div className="absolute bottom-0 left-0 w-[540px] h-[500px] bg-[url('/logo.svg')] bg-no-repeat bg-cover opacity-30" />
+
+        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[540px] h-[510px] bg-[url('/logo.svg')] bg-no-repeat bg-center bg-contain opacity-60" />
       </nav>
     </>
   );

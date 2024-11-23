@@ -1,7 +1,16 @@
+/* src/app/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
 @layer base {
   h1,
   h2,
@@ -9,15 +18,16 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-title);
+    font-family: var(--font-hanken-black);
   }
 
   p,
   span,
   li {
-    font-family: var(--font-text);
+    font-family: var(--font-hanken-regular);
   }
 }
+
 *,
 ::after,
 ::before {

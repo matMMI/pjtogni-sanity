@@ -17,6 +17,11 @@ module.exports = {
       animation: {
         wave: "wave 1.5s linear infinite",
       },
+      fontFamily: {
+        black: ["var(--font-hanken-black)"],
+        regular: ["var(--font-hanken-regular)"],
+        light: ["var(--font-hanken-light)"],
+      },
     },
   },
 };
