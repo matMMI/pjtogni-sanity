@@ -50,9 +50,12 @@ function ProjectCardSkeleton() {
   );
 }
 const getBadgeStyle = (category: { title: string; slug: string }) => {
+  const defaultStyle =
+    "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
+
   if (!category) return defaultStyle;
 
-  const styles = {
+  const styles: Record<string, string> = {
     "web-development":
       "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300",
     "mobile-dev":
@@ -67,10 +70,7 @@ const getBadgeStyle = (category: { title: string; slug: string }) => {
       "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300",
   };
 
-  return (
-    styles[category.slug] ||
-    "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300"
-  );
+  return styles[category.slug] || defaultStyle;
 };
 function ProjectCard({ project }: { project: Project }) {
   return (
@@ -109,7 +109,13 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-function Dialog({ isOpen, onClose, children }) {
+interface DialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}
+
+function Dialog({ isOpen, onClose, children }: DialogProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -138,7 +144,6 @@ function Dialog({ isOpen, onClose, children }) {
     </AnimatePresence>
   );
 }
-
 export default function ProjectsList({ projects }: { projects: Project[] }) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
