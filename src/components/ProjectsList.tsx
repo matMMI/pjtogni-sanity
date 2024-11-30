@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
 import { motion, AnimatePresence } from "framer-motion";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 interface Project {
   _id: string;
   title: string;
@@ -119,7 +120,7 @@ function Dialog({ isOpen, onClose, children }: DialogProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 m-0"
         >
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
@@ -131,7 +132,7 @@ function Dialog({ isOpen, onClose, children }: DialogProps) {
               onClick={onClose}
               className="absolute z-10 top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 transition-colors"
             >
-              ×
+              <XMarkIcon className="w-5 h-5" />
             </button>
             {children}
           </motion.div>
