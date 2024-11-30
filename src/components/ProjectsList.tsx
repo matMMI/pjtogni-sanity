@@ -4,8 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { PortableText } from "@portabletext/react";
-import { motion, AnimatePresence } from "framer-motion"; // Ajout de AnimatePresence
-
+import { motion, AnimatePresence } from "framer-motion";
 interface Project {
   _id: string;
   title: string;
@@ -21,7 +20,6 @@ interface Project {
     slug: string;
   };
 }
-
 function ProjectCardSkeleton() {
   return (
     <div className="relative bg-[#1E1E1E] rounded-md overflow-hidden shadow-md">
@@ -52,9 +50,7 @@ function ProjectCardSkeleton() {
 const getBadgeStyle = (category: { title: string; slug: string }) => {
   const defaultStyle =
     "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-
   if (!category) return defaultStyle;
-
   const styles: Record<string, string> = {
     "web-development":
       "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300",
@@ -155,14 +151,17 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 
   // Récupération des catégories uniques
   const categories = Array.from(
-    new Set(
+    new Map(
       projects
         .filter((project) => project.category)
-        .map((project) => ({
-          title: project.category.title,
-          slug: project.category.slug,
-        }))
-    )
+        .map((project) => [
+          project.category.slug,
+          {
+            title: project.category.title,
+            slug: project.category.slug,
+          },
+        ])
+    ).values()
   ).sort((a, b) => a.title.localeCompare(b.title));
   const filteredProjects = selectedCategory
     ? sortedProjects.filter(
