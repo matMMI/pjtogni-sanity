@@ -2,7 +2,7 @@ import sharp from "sharp";
 import path from "path";
 import fs from "fs";
 
-const sizes = [16, 32, 48, 72, 96, 144, 192, 256, 384, 512];
+const sizes = [16, 32, 48, 72, 96, 128, 144, 152, 180, 192, 256, 384, 512];
 
 async function generateIcons() {
   const logoPath = path.join(process.cwd(), "public", "logo.png"); // Your original logo
