@@ -12,19 +12,15 @@ const Navbar = () => {
   const navLinks = [
     { href: "/a-propos", label: "À propos" },
     { href: "/projects", label: "Tous mes projets" },
-    { href: "/test", label: "Test" },
+    // { href: "/test", label: "Test" },
   ];
 
   const isActiveLink = (path: string) => pathname === path;
-
-  // Fonction pour fermer le menu mobile
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false);
   };
-
   return (
     <>
-      {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         className="z-[11] lg:hidden fixed top-4 right-4 p-2 bg-black text-white rounded-md"
@@ -76,7 +72,7 @@ const Navbar = () => {
         </div>
 
         {/* CTA Button */}
-        <div className="relative z-10">
+        {/* <div className="relative z-10">
           <a
             href="/cv.pdf"
             download
@@ -84,7 +80,7 @@ const Navbar = () => {
           >
             Télécharger le CV
           </a>
-        </div>
+        </div> */}
 
         {/* Background Logo */}
 
