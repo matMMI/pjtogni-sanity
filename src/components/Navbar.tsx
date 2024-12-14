@@ -71,8 +71,7 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* CTA Button */}
-        {/* <div className="relative z-10">
+        <div className="relative z-10">
           <a
             href="/cv.pdf"
             download
@@ -80,7 +79,7 @@ const Navbar = () => {
           >
             Télécharger le CV
           </a>
-        </div> */}
+        </div>
 
         {/* Background Logo */}
 

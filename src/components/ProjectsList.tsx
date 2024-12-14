@@ -33,11 +33,10 @@ function ProjectCardSkeleton() {
           animation: "wave 1.5s linear infinite",
         }}
       />
-
       <div className="relative">
         <div className="h-60 bg-[#2C2C2C]" />
         <div className="p-6 space-y-4">
-          <div className="h-8 bg-[#2C2C2C] rounded-full w-1/3" />{" "}
+          <div className="h-8 bg-[#2C2C2C] rounded-full w-1/3" />
           <div className="h-6 bg-[#2C2C2C] rounded-md w-3/4" />
           <div className="space-y-3">
             <div className="h-4 bg-[#2C2C2C] rounded-md w-full" />
@@ -48,25 +47,19 @@ function ProjectCardSkeleton() {
     </div>
   );
 }
-const getBadgeStyle = (category: { title: string; slug: string }) => {
-  const defaultStyle =
-    "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300";
-  if (!category) return defaultStyle;
-  const styles: Record<string, string> = {
-    "web-development":
-      "bg-rose-100 text-rose-800 dark:bg-rose-900 dark:text-rose-300",
-    "mobile-dev":
-      "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300",
-    illustration:
-      "bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300",
-    frontend:
-      "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300",
-    infographie:
-      "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300",
-    litterature:
-      "bg-violet-100 text-violet-800 dark:bg-violet-900 dark:text-violet-300",
-  };
 
+const getBadgeStyle = (category: { title: string; slug: string }) => {
+  const defaultStyle = "bg-blue-900 text-blue-300";
+  if (!category) return defaultStyle;
+
+  const styles: Record<string, string> = {
+    "web-development": "bg-rose-900 text-rose-300",
+    "mobile-dev": "bg-yellow-900 text-yellow-300",
+    illustration: "bg-emerald-900 text-emerald-300",
+    frontend: "bg-indigo-900 text-indigo-300",
+    infographie: "bg-amber-900 text-amber-300",
+    litterature: "bg-violet-900 text-violet-300",
+  };
   return styles[category.slug] || defaultStyle;
 };
 function ProjectCard({ project }: { project: Project }) {
@@ -74,7 +67,7 @@ function ProjectCard({ project }: { project: Project }) {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative bg-white dark:bg-[#1E1E1E] rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+      className="group relative bg-[#1E1E1E] rounded-md overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
     >
       {project.image && (
         <div className="relative h-60 overflow-hidden">
@@ -95,12 +88,10 @@ function ProjectCard({ project }: { project: Project }) {
         >
           {project.category?.title || "Non catégorisé"}
         </span>
-        <h2 className="text-xl font-semibold mb-3 text-gray-900 dark:text-white">
+        <h2 className="text-xl font-semibold mb-3 text-white">
           {project.title}
         </h2>
-        <p className="text-gray-600 dark:text-gray-300 line-clamp-3">
-          {project.description}
-        </p>
+        <p className="text-gray-300 line-clamp-3">{project.description}</p>
       </div>
     </motion.div>
   );
@@ -126,11 +117,11 @@ function Dialog({ isOpen, onClose, children }: DialogProps) {
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-white dark:bg-[#1E1E1E] p-6 rounded-md max-w-4xl w-full max-h-[90vh] overflow-auto relative shadow-2xl"
+            className="bg-[#1E1E1E] p-6 rounded-md max-w-4xl w-full max-h-[90vh] overflow-auto relative shadow-2xl"
           >
             <button
               onClick={onClose}
-              className="absolute z-10 top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 dark:bg-white/10 dark:hover:bg-white/20 transition-colors"
+              className="absolute z-10 top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors"
             >
               <XMarkIcon className="w-5 h-5" />
             </button>
@@ -187,7 +178,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
             className={`px-4 py-2 rounded-full transition-all ${
               selectedCategory === null
                 ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
             }`}
           >
             Tous
@@ -199,7 +190,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
               className={`px-4 py-2 rounded-full transition-all ${
                 selectedCategory === category.title
                   ? getBadgeStyle(category)
-                  : "bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  : "bg-gray-700 text-gray-300 hover:bg-gray-600"
               }`}
             >
               {category.title}
@@ -252,14 +243,14 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                 className="object-cover"
               />
             </div>
-            <div className="prose dark:prose-invert max-w-none">
-              <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 rounded-full mb-3">
+            <div className="prose prose-invert max-w-none">
+              <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-900 text-blue-300 rounded-full mb-3">
                 {selectedProject.category?.title || "Non catégorisé"}
               </span>
               <h2 className="text-3xl font-bold mb-4">
                 {selectedProject.title}
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300">
+              <p className="text-lg text-gray-300">
                 {selectedProject.description}
               </p>
               {selectedProject.body && (

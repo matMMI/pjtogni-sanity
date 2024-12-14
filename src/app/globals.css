@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -11,6 +12,7 @@
     scrollbar-width: none;
   }
 }
+
 @layer base {
   h1,
   h2,
@@ -20,7 +22,6 @@
   h6 {
     font-family: var(--font-hanken-black);
   }
-
   p,
   span,
   li {
@@ -37,15 +38,8 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @keyframes wave {
@@ -74,6 +68,7 @@ body {
 .div1 {
   grid-area: 1 / 1 / 6 / 4;
 }
+
 .div2 {
   grid-area: 1 / 4 / 6 / 13;
 }
