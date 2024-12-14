@@ -6,18 +6,9 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { client } from "@/sanity/client";
 
-interface Resume {
-  pdfFile: {
-    asset: {
-      url: string;
-    };
-  };
-  active: boolean;
-}
-
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [resumeData, setResumeData] = useState<Resume | null>(null);
+  const [resumeUrl, setResumeUrl] = useState(null);
   const pathname = usePathname();
 
   const navLinks = [
@@ -28,17 +19,29 @@ const Navbar = () => {
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const resume = await client.fetch<Resume | null>(`
-          *[_type == "resume" && active == true][0]{
-            "pdfFile": {
-              "asset": {
-                "url": pdfFile.asset->url
+        const response = await client.fetch(`{
+          "result": *[_type == "resume" && active == true][0] {
+            _type,
+            title,
+            active,
+            pdfFile {
+              asset {
+                _ref
               }
-            },
-            active
+            }
           }
-        `);
-        setResumeData(resume);
+        }`);
+
+        if (response?.result?.pdfFile?.asset?._ref) {
+          // Extraire l'ID du fichier du _ref
+          const fileId = response.result.pdfFile.asset._ref
+            .replace("file-", "")
+            .replace("-pdf", "");
+
+          // Construire l'URL du fichier
+          const fileUrl = `https://cdn.sanity.io/files/6647uzn8/production/${fileId}.pdf`;
+          setResumeUrl(fileUrl);
+        }
       } catch (error) {
         console.error("Erreur lors de la récupération du CV:", error);
       }
@@ -46,11 +49,6 @@ const Navbar = () => {
 
     fetchResume();
   }, []);
-
-  const isActiveLink = (path: string) => pathname === path;
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
 
   return (
     <>
@@ -82,16 +80,16 @@ const Navbar = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  onClick={handleLinkClick}
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className={`block text-lg transition-all duration-200 hover:text-gray-300 relative group ${
-                    isActiveLink(link.href) ? "text-white" : "text-gray-400"
+                    pathname === link.href ? "text-white" : "text-gray-400"
                   }`}
                 >
                   <span className="relative">
                     {link.label}
                     <span
                       className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full ${
-                        isActiveLink(link.href) ? "w-full" : "w-0"
+                        pathname === link.href ? "w-full" : "w-0"
                       }`}
                     />
                   </span>
@@ -101,11 +99,13 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {resumeData?.pdfFile?.asset?.url && (
+        {resumeUrl && (
           <div className="relative z-10">
             <a
-              href={resumeData.pdfFile.asset.url}
+              href={resumeUrl}
               download
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block px-6 py-3 border border-white text-white transition-all duration-300 hover:bg-white hover:text-black hover:shadow-lg transform hover:-translate-y-1"
             >
               Télécharger le CV

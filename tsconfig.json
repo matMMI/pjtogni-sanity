@@ -30,7 +30,8 @@
     ".next/types/**/*.ts",
     "global.d.ts",
     "next.config.ks",
-    "src/app/projects/page.tsx"
+    "src/app/projects/page.tsx",
+    "src/components/Navbar.jsx"
   ],
   "exclude": ["node_modules"]
 }
