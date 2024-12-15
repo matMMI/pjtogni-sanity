@@ -3,58 +3,66 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, FileText } from "lucide-react";
 import { client } from "@/sanity/client";
+
+const navLinks = [
+  { href: "/a-propos", label: "À propos" },
+  { href: "/projects", label: "Tous mes projets" },
+];
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [resumeUrl, setResumeUrl] = useState(null);
+  const [resumeData, setResumeData] = useState({
+    fileUrl: null,
+    isLoading: true,
+    error: null,
+  });
   const pathname = usePathname();
-
-  const navLinks = [
-    { href: "/a-propos", label: "À propos" },
-    { href: "/projects", label: "Tous mes projets" },
-  ];
 
   useEffect(() => {
     const fetchResume = async () => {
       try {
-        const response = await client.fetch(`{
-          "result": *[_type == "resume" && active == true][0] {
-            _type,
-            title,
-            active,
-            pdfFile {
-              asset {
-                _ref
-              }
-            }
-          }
-        }`);
+        const query = `*[_type == "resume" && active == true][0] {
+          "fileUrl": pdfFile.asset->url
+        }`;
 
-        if (response?.result?.pdfFile?.asset?._ref) {
-          // Extraire l'ID du fichier du _ref
-          const fileId = response.result.pdfFile.asset._ref
-            .replace("file-", "")
-            .replace("-pdf", "");
+        const result = await client.fetch(query);
 
-          // Construire l'URL du fichier
-          const fileUrl = `https://cdn.sanity.io/files/6647uzn8/production/${fileId}.pdf`;
-          setResumeUrl(fileUrl);
-        }
+        setResumeData({
+          fileUrl: result?.fileUrl || null,
+          isLoading: false,
+          error: null,
+        });
       } catch (error) {
         console.error("Erreur lors de la récupération du CV:", error);
+        setResumeData({
+          fileUrl: null,
+          isLoading: false,
+          error: "Impossible de charger le CV pour le moment",
+        });
       }
     };
 
     fetchResume();
   }, []);
 
+  const handleMobileMenuToggle = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLinkClick = () => {
+    if (isMobileMenuOpen) {
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
     <>
       <button
-        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        onClick={handleMobileMenuToggle}
         className="z-[11] lg:hidden fixed top-4 right-4 p-2 bg-black text-white rounded-md"
+        aria-label={isMobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
       >
         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -68,11 +76,13 @@ const Navbar = () => {
       >
         <div className="relative z-10">
           <div className="text-center mb-20">
-            <h1 className="text-2xl font-bold whitespace-nowrap">
-              PIERRE-JEAN
-              <br /> TOGNI
-            </h1>
-            <p className="text-sm uppercase mt-2 opacity-80">Infographiste</p>
+            <Link href="/" onClick={handleLinkClick}>
+              <h1 className="text-2xl font-bold whitespace-nowrap">
+                PIERRE-JEAN
+                <br /> TOGNI
+              </h1>
+              <p className="text-sm uppercase mt-2 opacity-80">Infographiste</p>
+            </Link>
           </div>
 
           <ul className="space-y-6">
@@ -80,7 +90,7 @@ const Navbar = () => {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={handleLinkClick}
                   className={`block text-lg transition-all duration-200 hover:text-gray-300 relative group ${
                     pathname === link.href ? "text-white" : "text-gray-400"
                   }`}
@@ -99,21 +109,35 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {resumeUrl && (
-          <div className="relative z-10">
-            <a
-              href={resumeUrl}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-6 py-3 border border-white text-white transition-all duration-300 hover:bg-white hover:text-black hover:shadow-lg transform hover:-translate-y-1"
-            >
-              Télécharger le CV
-            </a>
-          </div>
-        )}
+        <div className="relative z-10">
+          {resumeData.isLoading ? (
+            <span className="inline-block px-6 py-3 border border-white/50 text-white/50">
+              Chargement...
+            </span>
+          ) : resumeData.error ? (
+            <span className="inline-block px-6 py-3 text-red-400 text-sm">
+              {resumeData.error}
+            </span>
+          ) : (
+            resumeData.fileUrl && (
+              <a
+                href={resumeData.fileUrl}
+                download
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-3 border border-white text-white transition-all duration-300 hover:bg-white hover:text-black hover:shadow-lg transform hover:-translate-y-1"
+              >
+                <FileText size={18} />
+                Télécharger le CV
+              </a>
+            )
+          )}
+        </div>
 
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[540px] h-[510px] bg-[url('/logo.svg')] bg-no-repeat bg-center bg-contain opacity-60" />
+        <div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 w-[540px] h-[510px] bg-[url('/logo.svg')] bg-no-repeat bg-center bg-contain opacity-60"
+          aria-hidden="true"
+        />
       </nav>
     </>
   );
